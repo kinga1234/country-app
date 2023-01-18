@@ -10,26 +10,9 @@ headers = {
 
 response = requests.request("GET", url, headers=headers)
 
-data = response.json()
+data = response.json()["list"]
 
-country_name = [item["code"] + " - " + item['name']['common'] for item in data["list"]]
+# list with all country code and full country name
+country_name = [item["code"] + " - " + item['name']['common'] for item in data]
 
-# new_data = {
-#     "name": data["name"]["common"],
-#     "borders": data["borders"],
-#     "capital": data["capital"],
-#     "continents": data["continents"],
-#     "currencies": data["currencies"],
-#     "flags": data["flags"]["png"],
-#     "languages": data["languages"],
-#     "population": data["population"],
-# }
-#
-#
-# data_to_print = f"{data['name']['common']}\nBorders: {' '.join(data['borders'])} \nCapital: {''.join(data['capital'])}" \
-#                 f"\nContinents: {' '.join(data['continents'])} \n" \
-#                 f"Currencies: {list(list(data['currencies'].values())[0].values())[0]}\n" \
-#                 f"Flags: {data['flags']['png']}" \
-#                 f"\nLanguages: {' '.join(list(data['languages'].values()))} \nPopulation: {data['population']} "
-#
-# print(data_to_print)
+
