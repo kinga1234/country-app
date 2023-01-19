@@ -10,22 +10,37 @@ num_que_1 = 0
 num_que_2 = 0
 
 
+# Add line break after every 30 characters
+def too_many_characters(characters):
+    new_string = ""
+    for i, letter in enumerate(characters):
+        if i % 30 == 0 and i != 0:
+            new_string += '-\n-'
+        new_string += letter
+    return new_string
+
+
 # get user choose and print selected data about country
 def get_selection():
     choose_country = country_combobox.get()
     index_country = country_name.index(choose_country)
     n_data = data[index_country]
     if "borders" not in n_data:
-        n_data["borders"] = "0"
+        n_data["borders"] = "-"
+    if "capital" not in n_data:
+        n_data["capital"] = "lack of information"
+    # if "currencies" not in n_data:
+    #     n_data["currencies"] = "lack of information"
+
     populations.append({n_data['name']['common']: n_data['population']})
     data_to_print = f"{n_data['name']['common']}" \
-                    f"\nBorders: {' '.join(n_data['borders'])} " \
+                    f"\nBorders: {too_many_characters(' '.join(n_data['borders']))} " \
                     f"\nCapital: {''.join(n_data['capital'])}" \
                     f"\nContinents: {' '.join(n_data['continents'])} " \
-                    f"\nCurrencies: {list(list(n_data['currencies'].values())[0].values())[0]}" \
                     f"\nFlags: {n_data['flags']['png']}" \
-                    f"\nLanguages: {' '.join(list(n_data['languages'].values()))} " \
+                    f"\nLanguages: {too_many_characters(' '.join(list(n_data['languages'].values())))} " \
                     f"\nPopulation: {n_data['population']} "
+    # f"\nCurrencies: {list(list(n_data['currencies'].values())[0].values())[0]}" \
 
     canvas_box.itemconfig(country_info_text, text=data_to_print)
 
@@ -103,8 +118,8 @@ choose_country_label.grid(row=0, column=0)
 country_combobox = ttk.Combobox(window, values=country_name)
 country_combobox.grid(row=0, column=1)
 
-canvas_box = Canvas(window, width=300, height=220, bg="white")
-country_info_text = canvas_box.create_text(150, 110, text="", font=("Arial", 12, "italic"))
+canvas_box = Canvas(window, width=370, height=280, bg="white")
+country_info_text = canvas_box.create_text(185, 140, text="", font=("Arial", 12, "italic"))
 canvas_box.grid(row=2, column=0, columnspan=2, pady=20)
 
 button = Button(window, text="show information", command=get_selection)
