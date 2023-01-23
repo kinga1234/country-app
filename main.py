@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 from data import data, country_name
+import pandas as pd
+import matplotlib.pyplot as plt
 import random
 
 populations = []
@@ -32,7 +34,7 @@ def get_selection():
     # if "currencies" not in n_data:
     #     n_data["currencies"] = "lack of information"
 
-    populations.append({n_data['name']['common']: n_data['population']})
+    populations.append({"country_name": n_data['name']['common'], "population": n_data['population']})
     data_to_print = f"{n_data['name']['common']}" \
                     f"\nBorders: {too_many_characters(' '.join(n_data['borders']))} " \
                     f"\nCapital: {''.join(n_data['capital'])}" \
@@ -45,6 +47,16 @@ def get_selection():
     canvas_box.itemconfig(country_info_text, text=data_to_print)
 
 
+def show_plot():
+    df = pd.DataFrame(populations)
+    df.plot(x="country_name", y="population", kind="bar")
+    num_pop_data = [populations[num]["population"] for num in range(len(populations))]
+    print(num_pop_data)
+    for index, value in enumerate(num_pop_data):
+        plt.text(x=index, y=value, s=f"{value}")
+
+    plt.show()
+
 # display next question in quiz and update score
 def next_question():
     canvas_box.itemconfig(country_info_text, text="")
@@ -54,17 +66,18 @@ def next_question():
     all_num_que.remove(num_que_1)
     num_que_2 = random.choice(all_num_que)
     # get key as str from list of dict
-    question = f"{list(populations[num_que_1].keys())[0]}    vs    {list(populations[num_que_2].keys())[0]}"
+    que = f"{populations[num_que_1]['country_name']}      vs     {populations[num_que_2]['country_name']}"
+    # question = f"{list(populations[num_que_1].keys())[0]}    vs    {list(populations[num_que_2].keys())[0]}"
     score_label.config(text=f"Score: {score}")
     canvas_quiz_box.config(bg="white")
-    canvas_quiz_box.itemconfig(quiz_text, text=question)
+    canvas_quiz_box.itemconfig(quiz_text, text=que)
 
 
 # check user answer and return true or false
 def check_answer(user_answer):
     global num_que_1, num_que_2, score
     # get value as int from list of dict
-    if list(populations[num_que_1].values())[0] > list(populations[num_que_2].values())[0]:
+    if populations[num_que_1]["population"] > populations[num_que_2]["population"]:
         correct_answer = "first"
         if user_answer == correct_answer:
             score += 1
@@ -125,6 +138,13 @@ canvas_box.grid(row=2, column=0, columnspan=2, pady=20)
 button = Button(window, text="show information", command=get_selection)
 button.grid(row=1, column=1)
 
+# --- UI setup to plot ---
+plot_label = Label(text="PLOT: Click the button next to see plot with\n populations of the countries selected previous",
+                   fg="black", bg="#B1DDC6", font=("Arial", 10))
+plot_label.grid(row=3, column=0)
+
+plot_button = Button(window, text="show plot", command=show_plot)
+plot_button.grid(row=3, column=1)
 
 # --- UI setup to quiz about populations ---
 quiz_label = Label(text="QUIZ: Check your knowledge about the populations of the countries selected previous",
