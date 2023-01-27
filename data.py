@@ -10,9 +10,7 @@ headers = {
 
 response = requests.request("GET", url, headers=headers)
 
-data = response.json()["list"]
+my_data = response.json()["list"]
 
 # list with all country code and full country name
-country_name = [item["code"] + " - " + item['name']['common'] for item in data]
-
-
+country_name = [item["code"] + " - " + item['name']['common'] for item in my_data]
