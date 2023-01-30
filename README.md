@@ -10,8 +10,8 @@ In the first part of the program, we choose a country from the list and click th
 - Python - tkinter
 - Python - pandas 1.5.3
 - Python - matplotlib 3.6.3
-## Program files description:
 
+## Program files description
 - main.py - calling a functions 
 - widgets.py - function with all GUI widgets
 - gui_helper_functions.py - functions responsible for the operation of the program 
